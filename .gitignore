@@ -2,3 +2,5 @@
 node_modules
 log
 .note
+*_test
+lame

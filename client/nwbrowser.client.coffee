@@ -36,6 +36,7 @@ class NetworkBrowser
         if err 
           reject err
 
+        delete body['mexico']
         # delete  body[self.name]
         resolve body
 
