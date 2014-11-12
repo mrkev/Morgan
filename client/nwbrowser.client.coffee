@@ -85,7 +85,8 @@ class NetworkBrowser
   
       stream.on 'data', (chunk) ->
         prog_file += chunk.length
-        console.log 'got %d bytes of data out of %d (%d)', chunk.length, size_file, prog_file/size_file
+        console.log 'got %d bytes of data out of %d (%d)', chunk.length
+                  , size_file, prog_file/size_file
       
       stream.on 'error', (err) ->
         reject err
@@ -111,3 +112,4 @@ if require.main is module
       return nwb.get_file('10.147.137.229', '/Users/Kevin/Downloads/uTorrent/FRUTA/01 Palmar.m4a')
     .then(console.log)
     .catch(console.trace)
+

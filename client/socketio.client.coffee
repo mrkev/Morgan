@@ -4,19 +4,18 @@ FileManager = require "./filemanager.server.coffee"
 NetworkBrowser = require "./nwbrowser.client.coffee"
 
 class Client
-  constructor : ->
+  constructor : (downloads_dir, mothership) ->
     
-    @fm = new FileManager '/Users/Kevin/Downloads/uTorrent', (fm) ->
+    @fm = new FileManager downloads_dir, (fm) ->
       serv = new SimpServ(fm)
       serv.listen 3110
 
-    @nwb = new NetworkBrowser 'http://10.32.196.154:2800/'
+    @nwb = new NetworkBrowser mothership
     @nwb.post_ip()
 
 
 if require.main is module
-    client = new Client()
-    
+    client = new Client '/Users/Kevin/Downloads/uTorrent', 'http://localhost:2800/'  #'http://10.32.196.154:2800/'
     client.nwb.request_ips()
     .then (ips) ->
       return new Promise (resolve) ->
