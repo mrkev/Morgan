@@ -70,6 +70,9 @@ class SimpServ
 
 module.exports = SimpServ
 
+
+
+##
 # Test if main script #
 if require.main is module
     serv = new SimpServ()

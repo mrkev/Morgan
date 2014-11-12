@@ -14,6 +14,11 @@ class Client
     @nwb.post_ip()
 
 
+module.exports = Client
+
+
+##
+# Test if main script #
 if require.main is module
     client = new Client '/Users/Kevin/Downloads/uTorrent', 'http://localhost:2800/'  #'http://10.32.196.154:2800/'
     client.nwb.request_ips()

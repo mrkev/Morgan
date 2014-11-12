@@ -2,7 +2,7 @@
   "name": "Morgan",
   "version": "0.0.0",
   "description": "De Morgan associates Co.",
-  "main": "index.js",
+  "main": "client/client/socketio.client.coffee",
   "scripts": {
     "test": "mocha"
   },

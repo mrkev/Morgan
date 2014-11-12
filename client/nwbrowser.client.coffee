@@ -101,6 +101,8 @@ class NetworkBrowser
 
 module.exports = NetworkBrowser
 
+
+##
 # Test if main script #
 if require.main is module
     nwb = new NetworkBrowser('http://localhost:2800/')

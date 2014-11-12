@@ -48,6 +48,8 @@ class FileManager
 
 module.exports = FileManager
 
+
+##
 # Test if main script #
 if require.main is module
   fm = new FileManager '/Users/Kevin/Downloads/uTorrent', (fm) ->
