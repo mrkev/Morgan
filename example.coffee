@@ -1,14 +1,14 @@
 Promise = require("es6-promise").Promise
 Client  = require './client/socketio.client.coffee'
+config  = require './example_config.coffee'
 
-try 
-  config = require './example_config.coffee'
-catch e
-  config = 
-    share_dir : __dirname
+auth =
+  name : config.name
+  token : config.token
 
 
-client = new Client config.share_dir, 'http://10.32.196.154:2800/'  #'http://10.32.196.154:2800/'
+client = new Client config.share_dir
+client.connect_mothership 'http://10.32.196.154:2800/', auth
 
 all_results = []
 client.search_network('FRUTA', (results) ->

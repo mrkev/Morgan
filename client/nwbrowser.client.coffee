@@ -15,7 +15,7 @@ class NetworkBrowser
     self = this
     
     info =
-      token : "KJDSFL:SDOIFNOSDFIKJDSFJOSD"
+      token : token
       name : @name
       ip : require('ip').address()
 

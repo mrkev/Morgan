@@ -8,7 +8,7 @@ status = 0 : disconnected, 1 : listening, 3 : ip posted
 ###
 
 class Client
-  constructor : (downloads_dir, mothership) ->
+  constructor : (downloads_dir) ->
     @status = 0
 
     self = this
@@ -17,10 +17,12 @@ class Client
       serv.listen 3110
       self.status = 1
 
-
-    @nwb = new NetworkBrowser mothership, 'mrjamj'
+  ##
+  # Connects to a mothership
+  connect_mothership : (mothership, auth) ->
+    @nwb = new NetworkBrowser mothership, auth.name
     @nwb
-      .post_ip()
+      .post_ip(auth.token)
       .catch (err) ->
         console.log 'Couldn\'t post IP. Correct token?'
       .then (header) ->
