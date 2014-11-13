@@ -1,7 +1,14 @@
 Promise = require("es6-promise").Promise
 Client  = require './client/socketio.client.coffee'
 
-client = new Client '~/Downloads', 'http://10.32.196.154:2800/'  #'http://10.32.196.154:2800/'
+try 
+  config = require './example_config.coffee'
+catch e
+  config = 
+    share_dir : __dirname
+
+
+client = new Client config.share_dir, 'http://10.32.196.154:2800/'  #'http://10.32.196.154:2800/'
 client.nwb.request_ips()
 .then (ips) ->
   return new Promise (resolve) ->
