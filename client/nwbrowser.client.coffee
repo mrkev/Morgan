@@ -7,12 +7,11 @@ Promise = require("es6-promise").Promise
 path  = require("path")
 
 class NetworkBrowser
-  constructor : (@mothership) ->
-    @name = "mrjamj"
+  constructor : (@mothership, @name) ->
 
   ##
   # Returns: Promise to the response from ip posting
-  post_ip: () ->
+  post_ip: (token) ->
     self = this
     
     info =
@@ -25,6 +24,8 @@ class NetworkBrowser
       client.post "/ips", info, (err, res, body) ->
         if err 
           reject err
+        if body.status/100 is 4
+          reject (new Error(body.status))
         resolve body
 
   ##

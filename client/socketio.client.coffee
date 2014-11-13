@@ -3,16 +3,52 @@ SimpServ = require "./socketio.simpser.coffee"
 FileManager = require "./filemanager.server.coffee"
 NetworkBrowser = require "./nwbrowser.client.coffee"
 
+###
+status = 0 : disconnected, 1 : listening, 3 : ip posted
+###
+
 class Client
   constructor : (downloads_dir, mothership) ->
-    
+    @status = 0
+
+    self = this
     @fm = new FileManager downloads_dir, (fm) ->
       serv = new SimpServ(fm)
       serv.listen 3110
+      self.status = 1
 
-    @nwb = new NetworkBrowser mothership
-    @nwb.post_ip()
 
+    @nwb = new NetworkBrowser mothership, 'mrjamj'
+    @nwb
+      .post_ip()
+      .catch (err) ->
+        console.log 'Couldn\'t post IP. Correct token?'
+      .then (header) ->
+        self.status += 2
+
+  ##
+  # Searches entire network with [query].
+  # @param  [query] to search.
+  # @param  [callback] to be called when new results are available.
+  # @return Promise to undefined on search complete.
+  search_network : (query, callback) ->
+    self = this
+    @nwb.request_ips()
+    .then (ips) ->
+      chain = Promise.resolve()
+      acc   = []
+      
+      for own user, ip of ips
+        console.log ">: Now searching", user, ip
+        
+        chain = chain.then(() ->
+          console.log "searching", ip # Crashes if no mothership
+          return self.nwb
+            .search_for_file(ip, query) # Hangs if unavailable ip
+            .then callback
+        )
+
+      return chain
 
 module.exports = Client
 
