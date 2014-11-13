@@ -1,7 +1,7 @@
 Promise = require("es6-promise").Promise
 Client  = require './client/socketio.client.coffee'
 
-client = new Client '/Users/Kevin/Downloads/uTorrent', 'http://localhost:2800/'  #'http://10.32.196.154:2800/'
+client = new Client '~/Downloads', 'http://10.32.196.154:2800/'  #'http://10.32.196.154:2800/'
 client.nwb.request_ips()
 .then (ips) ->
   return new Promise (resolve) ->

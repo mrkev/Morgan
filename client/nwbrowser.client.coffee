@@ -1,6 +1,7 @@
 io = require "socket.io-client"
 ss = require "socket.io-stream"
 fs = require "fs"
+fexists = require 'file-exists'
 request = require 'request-json' 
 Promise = require("es6-promise").Promise
 path  = require("path")

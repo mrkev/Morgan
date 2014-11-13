@@ -21,6 +21,7 @@
     "connect": "^2.20.0",
     "es6-promise": "^1.0.0",
     "express": "^4.9.7",
+    "file-exists": "^0.1.1",
     "filed": "^0.1.0",
     "fs-extra": "^0.12.0",
     "inquirer": "^0.8.0",

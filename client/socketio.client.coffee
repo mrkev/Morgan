@@ -36,7 +36,7 @@ if require.main is module
         console.log ">:", user, ip
         
         chain = chain.then(() ->
-          console.log "searching", ip
+          console.log "searching", ip # Crashes if no mothership
           return client.nwb
           .search_for_file(ip, 'FRUTA') # Hangs if unavailable ip
           .then (search_results) ->
