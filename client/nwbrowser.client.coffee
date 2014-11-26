@@ -24,7 +24,7 @@ class NetworkBrowser
       client.post "/ips", info, (err, res, body) ->
         if err 
           reject err
-        if body.status/100 is 4
+        if body.status/100 is 4 # Crashes. No status if no mothership.
           reject (new Error(body.status))
         resolve body
 
@@ -43,7 +43,7 @@ class NetworkBrowser
         resolve body
 
   ##
-  # Returns: Promise to the search results on a single ip for a file
+  # Returns: Promise to the search results on a single ip for a filename query
   search_for_file: (ip, query) -> 
     return new Promise (resolve, reject) -> 
       socket = io.connect "http://#{ip}:3110/"
@@ -58,7 +58,9 @@ class NetworkBrowser
 
         socket.on 'search_results', (results) ->
           console.log 'recieved results'
-          resolve results
+          resolve results.map (x) ->
+            ip : ip
+            path : x
 
         socket.on 'error', (err) ->
           console.log 'errored'
