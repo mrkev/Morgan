@@ -40,13 +40,14 @@ class Client
       chain = Promise.resolve()
       acc   = []
       
-      for own user, ip of ips        
-        chain = chain.then(() ->
-          console.log ">: Now searching", user, ip # Crashes if no mothership
-          return self.nwb
-            .search_for_file(ip, query) # Hangs if unavailable ip
-            .then callback
-        )
+      for own user, ip of ips
+        do (user, ip) ->
+          chain = chain.then(() ->
+            console.log ">: Now searching", user, ip # Crashes if no mothership
+            return self.nwb
+              .search_for_file(ip, query) # Hangs if unavailable ip
+              .then callback
+          )
 
       return chain
 

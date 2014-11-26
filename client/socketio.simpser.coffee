@@ -23,13 +23,18 @@ class SimpServ
 
       console.log "peer connected"
 
+
+      socket.on 'error', (err) ->
+        console.log 'S: errored'
+
       
       ##
       # Request: Query object for file to search for.
       # Response: Array of file objects that match query.
       socket.on 'search_query', (query) ->
-        io.emit('server_log', "will search for #{query}")
-        io.emit('search_results', self.fm.search_paths(new RegExp(query)))
+        socket.emit('server_log', "will search for #{query}")
+        socket.emit('search_results', self.fm.search_paths(new RegExp(query)))
+        socket.disconnect();
       
     
       ## Unimplemented: (peer -> server) upload
@@ -48,16 +53,21 @@ class SimpServ
       
       ss(socket).on "get_file", (stream, data) ->
         
-        io.emit('server_log', "server will send #{data.name}")
+        socket.emit('server_log', "server will send #{data.name}")
         console.log "Will send", data.name
 
         # filename = path.basename(data.name)
         filename = data.name
-        io.emit('file_info', fs.statSync(filename)["size"])
+        socket.emit('file_info', fs.statSync(filename)["size"])
 
         fs.createReadStream(filename).pipe stream
         
-        io.emit('server_log', "server sending #{data.name}")
+        socket.emit('server_log', "server sending #{data.name}")
+
+
+
+      socket.on 'disconnect', () ->
+        console.log('user disconnected')
     )
 
   #

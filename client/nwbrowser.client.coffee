@@ -45,11 +45,26 @@ class NetworkBrowser
   ##
   # Returns: Promise to the search results on a single ip for a filename query
   search_for_file: (ip, query) -> 
-    return new Promise (resolve, reject) -> 
+    return new Promise (resolve, reject) ->       
       socket = io.connect "http://#{ip}:3110/"
 
+      console.log "http://#{ip}:3110/"
+
       socket.on 'connect_error', (err) ->
-        console.log err, 'http://#{ip}:3110/'
+        console.log err, "http://#{ip}:3110/"
+
+      socket.on 'error', (err) ->
+        console.log 'errored'
+        reject err
+
+      socket.on 'reconnect', (n) ->
+        console.log "reconnect #{n}"
+
+      socket.on 'reconnect_error', () ->
+        console.log 'reconnect_error'
+
+      socket.on 'reconnect_failed', () ->
+        console.log 'reconnect_failed'
 
       socket.on 'connect', () ->
         
@@ -62,13 +77,11 @@ class NetworkBrowser
             ip : ip
             path : x
 
-        socket.on 'error', (err) ->
-          console.log 'errored'
-          reject err
 
-        socket.on 'disconnect', () ->
-          console.log 'disconnected'
-          reject(new Error('disconnected'))
+
+      socket.on 'disconnect', () ->
+        console.log 'disconnected'
+        reject(new Error('disconnected'))
 
   ##
   # Returns: Promise to the file sucessfully downloaded, raising otherwise
