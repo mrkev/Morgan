@@ -46,7 +46,7 @@ class NetworkBrowser
   # Returns: Promise to the search results on a single ip for a filename query
   search_for_file: (ip, query) -> 
     return new Promise (resolve, reject) ->       
-      socket = io.connect "http://#{ip}:3110/"
+      socket = io.connect "http://#{ip}:3110/", {'force new connection': true, 'secure': true}
 
       console.log "http://#{ip}:3110/"
 
@@ -87,7 +87,7 @@ class NetworkBrowser
   # Returns: Promise to the file sucessfully downloaded, raising otherwise
   get_file: (ip, filename) ->
     return new Promise (resolve, reject) ->
-      socket = io.connect "http://#{ip}:3110/"
+      socket = io.connect "http://#{ip}:3110/", {'force new connection': true, 'secure': true}
   
       size_file = 0
       prog_file = 0

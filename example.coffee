@@ -15,6 +15,5 @@ client.search_network('FRUTA', (results) ->
   console.log 'got > ', results
   all_results = all_results.concat results
 ).then () ->
-  console.log 'all results:'
-  console.log all_results
+  console.log "#{all_results.length} results total"
 .catch console.trace
