@@ -87,7 +87,7 @@ class NetworkBrowser
 
   ##
   # Returns: Promise to the file sucessfully downloaded, raising otherwise
-  get_file: (ip, filename) ->
+  get_file: (ip, filename, info_call, progress_call) ->
 
     return new Promise (resolve, reject) ->
       socket = io.connect "http://#{ip}:3110/", {'force new connection': true}
@@ -99,29 +99,34 @@ class NetworkBrowser
       
       socket.on "server_log", console.log
   
-      socket.on "file_info", (s) -> 
+      socket.on "file_info", (s) ->
         console.log "got info #{s}"
         size_file = s
-  
-      fstream = ss.createStream()
-  
-      fstream.on 'data', (chunk) ->
-        prog_file += chunk.length
-        console.log 'got %d bytes of data out of %d (%d)', chunk.length
-                  , size_file, prog_file/size_file
-      
-      fstream.on 'error', (err) ->
-        reject err
-  
-      fstream.on 'end', () ->
-        resolve 'done.'
-        socket.disconnect()
-      
-      console.log ("to: ./" + path.basename(filename))
-      fstream.pipe fs.createWriteStream("./" + path.basename(filename)) #+ ".recieved")
-  
-      ss(socket).emit "get_file", fstream,
-        name: filename
+        if info_call
+          info_call s
+
+      socket.on 'connect', () ->
+
+        fstream = ss.createStream()
+        
+        fstream.on 'error', (err) ->
+          reject err
+    
+        fstream.on 'end', () ->
+          resolve 'done.'
+          socket.disconnect()
+        
+        ss(socket).emit "get_file", fstream,
+          name: filename
+        
+        fstream.pipe fs.createWriteStream("./" + path.basename(filename)) #+ ".recieved")
+
+        fstream.on 'data', (chunk) ->
+          prog_file += chunk.length
+          console.log 'got %d bytes of data out of %d (%d)', chunk.length
+                    , size_file, prog_file/size_file
+          if progress_call
+            progress_call prog_file/size_file, prog_file, size_file, chunk.length
 
 module.exports = NetworkBrowser
 

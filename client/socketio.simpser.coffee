@@ -48,17 +48,17 @@ class SimpServ
       # Response: File data for requested file.
       #           Error if file can't be sent.
       
-      ss(socket).on "get_file", (stream, data) ->
-        socket.emit('server_log', "S+: Server will send #{data.name}")
-        console.log "S-: Will send", data.name
+      ss(socket).on "get_file", (stream, file) ->
+        socket.emit('server_log', "S+: Server will send #{file.path}")
+        console.log "S-: Will send", file.path
 
-        # filename = path.basename(data.name)
-        filename = data.name
+        # filename = path.basename(file.path)
+        filename = file.path
         socket.emit('file_info', fs.statSync(filename)["size"])
 
         fs.createReadStream(filename).pipe stream
         
-        socket.emit('server_log', "S+: Server sending #{data.name}")
+        socket.emit('server_log', "S+: Server sending #{file.path}")
 
         return
 
