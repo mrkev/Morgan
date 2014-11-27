@@ -87,7 +87,7 @@ class NetworkBrowser
 
   ##
   # Returns: Promise to the file sucessfully downloaded, raising otherwise
-  get_file: (ip, filename, info_call, progress_call) ->
+  get_file: (ip, filename, progress_call, info_call) ->
 
     return new Promise (resolve, reject) ->
       socket = io.connect "http://#{ip}:3110/", {'force new connection': true}

@@ -20,9 +20,9 @@ client.search_network('FRUTA', (results) ->
   console.log all_results
   file = all_results[8]
   client.nwb.get_file(file.ip, file.path,
-    ((info) -> console.log("file to download:", info)),
     ((prog, sofar, tot) ->
-      console.log 'got %d bytes of data out of %d (%d)', sofar, tot, prog*100 >> 0)
+      console.log 'got %d bytes of data out of %d (%d)', sofar, tot, prog*100 >> 0),
+    ((info) -> console.log("file to download:", info))
   )
 ).then(console.log)
 .catch console.trace
