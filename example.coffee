@@ -14,6 +14,11 @@ all_results = []
 client.search_network('FRUTA', (results) ->
   console.log 'got > ', results
   all_results = all_results.concat results
-).then () ->
+).then(() ->
   console.log "#{all_results.length} results total"
+).then(() ->
+  console.log all_results
+  file = all_results[8]
+  client.nwb.get_file(file.ip, file.path)
+).then(console.log)
 .catch console.trace

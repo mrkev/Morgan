@@ -103,22 +103,24 @@ class NetworkBrowser
         console.log "got info #{s}"
         size_file = s
   
-      stream = ss.createStream()
+      fstream = ss.createStream()
   
-      stream.on 'data', (chunk) ->
+      fstream.on 'data', (chunk) ->
         prog_file += chunk.length
         console.log 'got %d bytes of data out of %d (%d)', chunk.length
                   , size_file, prog_file/size_file
       
-      stream.on 'error', (err) ->
+      fstream.on 'error', (err) ->
         reject err
   
-      stream.on 'end', () ->
+      fstream.on 'end', () ->
         resolve 'done.'
+        socket.disconnect()
       
-      stream.pipe fs.createWriteStream("./" + path.basename(filename)) #+ ".recieved")
+      console.log ("to: ./" + path.basename(filename))
+      fstream.pipe fs.createWriteStream("./" + path.basename(filename)) #+ ".recieved")
   
-      ss(socket).emit "get_file", stream,
+      ss(socket).emit "get_file", fstream,
         name: filename
 
 module.exports = NetworkBrowser

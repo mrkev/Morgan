@@ -32,7 +32,6 @@ class SimpServ
       socket.on 'search_query', (query) ->
         socket.emit('server_log', "S+: Will search for #{query}")
         socket.emit('search_results', self.fm.search_paths(new RegExp(query)))
-        socket.disconnect();
       
     
       ## Unimplemented: (peer -> server) upload
