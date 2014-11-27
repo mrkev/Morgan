@@ -20,19 +20,17 @@ class SimpServ
     #
     # Set up Socket.IO server
     io.on('connection', (socket) ->
-
-      console.log "peer connected"
-
+      console.log "S-: Peer connected"
 
       socket.on 'error', (err) ->
-        console.log 'S: errored'
+        console.log 'S-: errored'
 
       
       ##
       # Request: Query object for file to search for.
       # Response: Array of file objects that match query.
       socket.on 'search_query', (query) ->
-        socket.emit('server_log', "will search for #{query}")
+        socket.emit('server_log', "S+: Will search for #{query}")
         socket.emit('search_results', self.fm.search_paths(new RegExp(query)))
         socket.disconnect();
       
@@ -52,9 +50,8 @@ class SimpServ
       #           Error if file can't be sent.
       
       ss(socket).on "get_file", (stream, data) ->
-        
-        socket.emit('server_log', "server will send #{data.name}")
-        console.log "Will send", data.name
+        socket.emit('server_log', "S+: Server will send #{data.name}")
+        console.log "S-: Will send", data.name
 
         # filename = path.basename(data.name)
         filename = data.name
@@ -62,19 +59,19 @@ class SimpServ
 
         fs.createReadStream(filename).pipe stream
         
-        socket.emit('server_log', "server sending #{data.name}")
+        socket.emit('server_log', "S+: Server sending #{data.name}")
 
-
+        return
 
       socket.on 'disconnect', () ->
-        console.log('user disconnected')
+        console.log('S-: Peer disconnected')
     )
 
   #
   # Listen
   listen: (port) ->
     @http.listen port, () ->
-      console.log 'listening on *:3000'
+      console.log 'S-: listening on *:3000'
     
   
 

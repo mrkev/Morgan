@@ -76,6 +76,8 @@ class NetworkBrowser
           resolve results.map (x) ->
             ip : ip
             path : x
+          socket.disconnect()
+        return
 
 
 
@@ -86,16 +88,19 @@ class NetworkBrowser
   ##
   # Returns: Promise to the file sucessfully downloaded, raising otherwise
   get_file: (ip, filename) ->
+
     return new Promise (resolve, reject) ->
-      socket = io.connect "http://#{ip}:3110/", {'force new connection': true, 'secure': true}
+      socket = io.connect "http://#{ip}:3110/", {'force new connection': true}
   
       size_file = 0
       prog_file = 0
+
+      console.log "will get file #{filename}"
       
-      socket.on "server_log", (msg) -> 
-        console.log msg
+      socket.on "server_log", console.log
   
       socket.on "file_info", (s) -> 
+        console.log "got info #{s}"
         size_file = s
   
       stream = ss.createStream()
