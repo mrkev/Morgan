@@ -97,7 +97,8 @@ class NetworkBrowser
 
       console.log "will get file #{filename}"
       
-      socket.on "server_log", console.log
+      socket.on "server_log", (msg) ->
+        console.log msg
   
       socket.on "file_info", (s) ->
         console.log "got info #{s}"
